@@ -1383,6 +1383,8 @@
 <span id="1380">1380</span>
 <span id="1381">1381</span>
 <span id="1382">1382</span>
+<span id="1383">1383</span>
+<span id="1384">1384</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! The protected flash area (PFR) as Rust types</span>
 <span class="doccomment">//!</span>
@@ -1883,12 +1885,14 @@
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Deserialize</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">Ord</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>, <span class="ident">Serialize</span>)]</span>
 <span class="attribute">#[<span class="ident">repr</span>(<span class="ident">u8</span>)]</span>
+<span class="doccomment">/// Purposely swapped 48MHz and 96MHz values from what they are in</span>
+<span class="doccomment">/// reference manual (Rev. 2.1).  These are the correct values.</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">BootSpeed</span> {
     <span class="ident">Nxp</span> <span class="op">=</span> <span class="number">0</span>,
-    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;48MHz&quot;</span>)]</span>
-    <span class="ident">Fro48</span> <span class="op">=</span> <span class="number">1</span>,
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;96MHz&quot;</span>)]</span>
-    <span class="ident">Fro96</span> <span class="op">=</span> <span class="number">2</span>,
+    <span class="ident">Fro96</span> <span class="op">=</span> <span class="number">1</span>,
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;48MHz&quot;</span>)]</span>
+    <span class="ident">Fro48</span> <span class="op">=</span> <span class="number">2</span>,
     <span class="ident">Reserved</span> <span class="op">=</span> <span class="number">3</span>,
 }
 
