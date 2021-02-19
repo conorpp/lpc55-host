@@ -1414,6 +1414,22 @@
 <span id="1411">1411</span>
 <span id="1412">1412</span>
 <span id="1413">1413</span>
+<span id="1414">1414</span>
+<span id="1415">1415</span>
+<span id="1416">1416</span>
+<span id="1417">1417</span>
+<span id="1418">1418</span>
+<span id="1419">1419</span>
+<span id="1420">1420</span>
+<span id="1421">1421</span>
+<span id="1422">1422</span>
+<span id="1423">1423</span>
+<span id="1424">1424</span>
+<span id="1425">1425</span>
+<span id="1426">1426</span>
+<span id="1427">1427</span>
+<span id="1428">1428</span>
+<span id="1429">1429</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! The protected flash area (PFR) as Rust types</span>
 <span class="doccomment">//!</span>
@@ -1478,7 +1494,7 @@
     <span class="kw">pub</span> <span class="ident">usb_id</span>: <span class="ident">UsbId</span>,
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>)]</span>
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;is_default&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="ident">debug_settings</span>: <span class="ident">DebugSecurityPolicies</span>,
+    <span class="kw">pub</span> <span class="ident">debug_settings</span>: <span class="ident">DebugSecurity</span>,
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>)]</span>
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;is_default&quot;</span>)]</span>
     <span class="kw">pub</span> <span class="ident">vendor_usage</span>: <span class="ident">VendorUsage</span>,
@@ -1559,7 +1575,7 @@
     <span class="comment">// PIN = &quot;pinned&quot; or fixed</span>
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>)]</span>
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;is_default&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="ident">debug_settings</span>: <span class="ident">DebugSecurityPolicies</span>,
+    <span class="kw">pub</span> <span class="ident">debug_settings</span>: <span class="ident">DebugSecurity</span>,
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>)]</span>
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;is_default&quot;</span>)]</span>
     <span class="kw">pub</span> <span class="ident">enable_fault_analysis_mode</span>: <span class="ident">bool</span>,
@@ -1823,7 +1839,7 @@
         <span class="ident">cursor</span>.<span class="ident">write_all</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">usb_id</span>.<span class="ident">pid</span>.<span class="ident">to_le_bytes</span>())<span class="question-mark">?</span>;
         <span class="ident">cursor</span>.<span class="ident">write_all</span>(<span class="kw-2">&amp;</span>[<span class="number">0u8</span>; <span class="number">4</span>])<span class="question-mark">?</span>;
 
-        <span class="kw">let</span> <span class="ident">debug_settings</span>: [<span class="ident">u32</span>; <span class="number">2</span>] <span class="op">=</span> <span class="self">self</span>.<span class="ident">debug_settings</span>.<span class="ident">into</span>();
+        <span class="kw">let</span> <span class="ident">debug_settings</span>: [<span class="ident">u32</span>; <span class="number">2</span>] <span class="op">=</span> <span class="ident">Into</span>::<span class="op">&lt;</span><span class="ident">DebugSecurityPolicies</span><span class="op">&gt;</span>::<span class="ident">into</span>(<span class="self">self</span>.<span class="ident">debug_settings</span>).<span class="ident">into</span>();
         <span class="ident">cursor</span>.<span class="ident">write_all</span>(<span class="kw-2">&amp;</span><span class="ident">debug_settings</span>[<span class="number">0</span>].<span class="ident">to_le_bytes</span>())<span class="question-mark">?</span>;
         <span class="ident">cursor</span>.<span class="ident">write_all</span>(<span class="kw-2">&amp;</span><span class="ident">debug_settings</span>[<span class="number">1</span>].<span class="ident">to_le_bytes</span>())<span class="question-mark">?</span>;
 
@@ -1892,7 +1908,7 @@
     <span class="kw">let</span> <span class="ident">factory</span> <span class="op">=</span> <span class="ident">FactorySettings</span> {
         <span class="ident">boot_configuration</span>: <span class="ident">BootConfiguration</span>::<span class="ident">from</span>(<span class="ident">boot_cfg</span>),
         <span class="ident">usb_id</span>: <span class="ident">UsbId</span>::<span class="ident">from</span>(<span class="ident">usb_id</span>),
-        <span class="ident">debug_settings</span>: <span class="ident">DebugSecurityPolicies</span>::<span class="ident">from</span>([<span class="ident">cc_socu_default</span>, <span class="ident">cc_socu_pin</span>]),
+        <span class="ident">debug_settings</span>: <span class="ident">DebugSecurityPolicies</span>::<span class="ident">from</span>([<span class="ident">cc_socu_default</span>, <span class="ident">cc_socu_pin</span>]).<span class="ident">into</span>(),
         <span class="ident">vendor_usage</span>: <span class="ident">VendorUsage</span>::<span class="ident">from</span>(<span class="ident">vendor_usage</span>),
         <span class="ident">secure_boot_configuration</span>: <span class="ident">SecureBootConfiguration</span>::<span class="ident">from</span>(<span class="ident">secure_boot_cfg</span>),
         <span class="ident">prince_configuration</span>: <span class="ident">PrinceConfiguration</span>::<span class="ident">from</span>(<span class="ident">prince_cfg</span>),
@@ -2468,9 +2484,12 @@
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Deserialize</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">Ord</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>,<span class="ident">Serialize</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">DebugSecurityBlanketPolicy</span> {
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">DebugSecurity</span> {
     <span class="ident">AllDisabled</span>,
     <span class="ident">AllEnabled</span>,
+    <span class="ident">Custom</span> (
+        <span class="ident">DebugSecurityPolicies</span>,
+    )
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Deserialize</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">Ord</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>,<span class="ident">Serialize</span>)]</span>
@@ -2478,6 +2497,12 @@
     <span class="ident">EnableWithDap</span>,
     <span class="ident">Disabled</span>,
     <span class="ident">Enabled</span>,
+}
+
+<span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">DebugSecurity</span> {
+    <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="self">Self</span>::<span class="ident">AllDisabled</span>
+    }
 }
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">DebugSecurityPolicy</span> {
@@ -2516,7 +2541,6 @@
 }
 
 <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename_all</span> <span class="op">=</span> <span class="string">&quot;kebab-case&quot;</span>)]</span>
-<span class="attribute">#[<span class="ident">serde</span>(<span class="ident">from</span> <span class="op">=</span> <span class="string">&quot;DebugSecurityBlanketPolicy&quot;</span>)]</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Default</span>, <span class="ident">Deserialize</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">Ord</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>, <span class="ident">Serialize</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">DebugSecurityPolicies</span> {
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>)]</span>
@@ -2563,16 +2587,24 @@
     <span class="kw">pub</span> <span class="ident">check_uuid</span>: <span class="ident">bool</span>,
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">DebugSecurityBlanketPolicy</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">DebugSecurityPolicies</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">value</span>: <span class="ident">DebugSecurityBlanketPolicy</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">DebugSecurity</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">DebugSecurityPolicies</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">value</span>: <span class="ident">DebugSecurity</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="kw">match</span> <span class="ident">value</span> {
             <span class="comment">// Fixed, Disabled</span>
-            <span class="ident">DebugSecurityBlanketPolicy</span>::<span class="ident">AllDisabled</span> <span class="op">=</span><span class="op">&gt;</span>
+            <span class="ident">DebugSecurity</span>::<span class="ident">AllDisabled</span> <span class="op">=</span><span class="op">&gt;</span>
                 [<span class="number">0xffffu32</span>, <span class="number">0x0000</span>].<span class="ident">into</span>(),
             <span class="comment">// Not fixed, Enabled</span>
-            <span class="ident">DebugSecurityBlanketPolicy</span>::<span class="ident">AllEnabled</span> <span class="op">=</span><span class="op">&gt;</span>
+            <span class="ident">DebugSecurity</span>::<span class="ident">AllEnabled</span> <span class="op">=</span><span class="op">&gt;</span>
                 [<span class="number">0x0000u32</span>, <span class="number">0xffff</span>].<span class="ident">into</span>(),
+            <span class="ident">DebugSecurity</span>::<span class="ident">Custom</span> ( <span class="ident">policies</span> ) <span class="op">=</span><span class="op">&gt;</span>
+                <span class="ident">policies</span>,
         }
+    }
+}
+
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">DebugSecurityPolicies</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">DebugSecurity</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">value</span>: <span class="ident">DebugSecurityPolicies</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="kw">return</span> <span class="ident">DebugSecurity</span>::<span class="ident">Custom</span>(<span class="ident">value</span>);
     }
 }
 
@@ -2692,7 +2724,7 @@
         <span class="ident">cursor</span>.<span class="ident">write_all</span>(<span class="kw-2">&amp;</span><span class="ident">u32</span>::<span class="ident">from</span>(<span class="self">self</span>.<span class="ident">rot_keys_status</span>).<span class="ident">to_le_bytes</span>())<span class="question-mark">?</span>;
         <span class="ident">cursor</span>.<span class="ident">write_all</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">vendor_usage</span>.<span class="ident">into</span>().<span class="ident">to_le_bytes</span>())<span class="question-mark">?</span>;
 
-        <span class="kw">let</span> <span class="ident">debug_settings</span>: [<span class="ident">u32</span>; <span class="number">2</span>] <span class="op">=</span> <span class="self">self</span>.<span class="ident">debug_settings</span>.<span class="ident">into</span>();
+        <span class="kw">let</span> <span class="ident">debug_settings</span>: [<span class="ident">u32</span>; <span class="number">2</span>] <span class="op">=</span> <span class="ident">Into</span>::<span class="op">&lt;</span><span class="ident">DebugSecurityPolicies</span><span class="op">&gt;</span>::<span class="ident">into</span>(<span class="self">self</span>.<span class="ident">debug_settings</span>).<span class="ident">into</span>();
         <span class="ident">cursor</span>.<span class="ident">write_all</span>(<span class="kw-2">&amp;</span><span class="ident">debug_settings</span>[<span class="number">0</span>].<span class="ident">to_le_bytes</span>())<span class="question-mark">?</span>;
         <span class="ident">cursor</span>.<span class="ident">write_all</span>(<span class="kw-2">&amp;</span><span class="ident">debug_settings</span>[<span class="number">1</span>].<span class="ident">to_le_bytes</span>())<span class="question-mark">?</span>;
 
@@ -2781,7 +2813,7 @@
         <span class="ident">image_key_revocation_id</span>: <span class="ident">MonotonicCounter</span>::<span class="ident">from</span>(<span class="ident">image_key_revocation_id</span>),
         <span class="ident">vendor_usage</span>: <span class="ident">VendorUsage</span>::<span class="ident">from</span>(<span class="ident">vendor_usage</span>),
         <span class="ident">rot_keys_status</span>: <span class="ident">RotKeysStatus</span>::<span class="ident">from</span>(<span class="ident">rot_keys_status</span>),
-        <span class="ident">debug_settings</span>: <span class="ident">DebugSecurityPolicies</span>::<span class="ident">from</span>([<span class="ident">dcfg_cc_socu_ns_default</span>, <span class="ident">dcfg_cc_socu_ns_pin</span>]),
+        <span class="ident">debug_settings</span>: <span class="ident">DebugSecurityPolicies</span>::<span class="ident">from</span>([<span class="ident">dcfg_cc_socu_ns_default</span>, <span class="ident">dcfg_cc_socu_ns_pin</span>]).<span class="ident">into</span>(),
         <span class="ident">enable_fault_analysis_mode</span>: <span class="ident">enable_fa</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span>,
         <span class="ident">factory_prog_in_progress</span>: <span class="ident">FactorySettingsProgInProgress</span>(<span class="ident">factory_prog_in_progress</span>),
         <span class="ident">prince_ivs</span>: [
