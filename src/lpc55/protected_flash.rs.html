@@ -1430,6 +1430,31 @@
 <span id="1427">1427</span>
 <span id="1428">1428</span>
 <span id="1429">1429</span>
+<span id="1430">1430</span>
+<span id="1431">1431</span>
+<span id="1432">1432</span>
+<span id="1433">1433</span>
+<span id="1434">1434</span>
+<span id="1435">1435</span>
+<span id="1436">1436</span>
+<span id="1437">1437</span>
+<span id="1438">1438</span>
+<span id="1439">1439</span>
+<span id="1440">1440</span>
+<span id="1441">1441</span>
+<span id="1442">1442</span>
+<span id="1443">1443</span>
+<span id="1444">1444</span>
+<span id="1445">1445</span>
+<span id="1446">1446</span>
+<span id="1447">1447</span>
+<span id="1448">1448</span>
+<span id="1449">1449</span>
+<span id="1450">1450</span>
+<span id="1451">1451</span>
+<span id="1452">1452</span>
+<span id="1453">1453</span>
+<span id="1454">1454</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! The protected flash area (PFR) as Rust types</span>
 <span class="doccomment">//!</span>
@@ -2589,13 +2614,38 @@
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">DebugSecurity</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">DebugSecurityPolicies</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">value</span>: <span class="ident">DebugSecurity</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="kw">use</span> <span class="ident">DebugSecurityPolicy</span>::<span class="kw-2">*</span>;
         <span class="kw">match</span> <span class="ident">value</span> {
             <span class="comment">// Fixed, Disabled</span>
-            <span class="ident">DebugSecurity</span>::<span class="ident">AllDisabled</span> <span class="op">=</span><span class="op">&gt;</span>
-                [<span class="number">0xffffu32</span>, <span class="number">0x0000</span>].<span class="ident">into</span>(),
-            <span class="comment">// Not fixed, Enabled</span>
-            <span class="ident">DebugSecurity</span>::<span class="ident">AllEnabled</span> <span class="op">=</span><span class="op">&gt;</span>
-                [<span class="number">0x0000u32</span>, <span class="number">0xffff</span>].<span class="ident">into</span>(),
+            <span class="ident">DebugSecurity</span>::<span class="ident">AllDisabled</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">DebugSecurityPolicies</span> {
+                <span class="ident">nonsecure_noninvasive</span>: <span class="ident">Disabled</span>,
+                <span class="ident">nonsecure_invasive</span>: <span class="ident">Disabled</span>,
+                <span class="ident">secure_noninvasive</span>: <span class="ident">Disabled</span>,
+                <span class="ident">secure_invasive</span>: <span class="ident">Disabled</span>,
+                <span class="ident">cm33_invasive</span>: <span class="ident">Disabled</span>,
+                <span class="ident">cm33_noninvasive</span>: <span class="ident">Disabled</span>,
+                <span class="ident">jtag_tap</span>: <span class="ident">Disabled</span>,
+                <span class="ident">flash_mass_erase_command</span>: <span class="ident">Disabled</span>,
+                <span class="ident">isp_boot_command</span>: <span class="ident">Disabled</span>,
+                <span class="ident">fault_analysis_command</span>: <span class="ident">Disabled</span>,
+                <span class="ident">check_uuid</span>: <span class="bool-val">true</span>,
+            },
+
+            <span class="comment">// Fixed, Enabled</span>
+            <span class="ident">DebugSecurity</span>::<span class="ident">AllEnabled</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">DebugSecurityPolicies</span> {
+                <span class="ident">nonsecure_noninvasive</span>: <span class="ident">Enabled</span>,
+                <span class="ident">nonsecure_invasive</span>: <span class="ident">Enabled</span>,
+                <span class="ident">secure_noninvasive</span>: <span class="ident">Enabled</span>,
+                <span class="ident">secure_invasive</span>: <span class="ident">Enabled</span>,
+                <span class="ident">cm33_invasive</span>: <span class="ident">Enabled</span>,
+                <span class="ident">cm33_noninvasive</span>: <span class="ident">Enabled</span>,
+                <span class="ident">jtag_tap</span>: <span class="ident">Enabled</span>,
+                <span class="ident">flash_mass_erase_command</span>: <span class="ident">Enabled</span>,
+                <span class="ident">isp_boot_command</span>: <span class="ident">Enabled</span>,
+                <span class="ident">fault_analysis_command</span>: <span class="ident">Enabled</span>,
+                <span class="ident">check_uuid</span>: <span class="bool-val">false</span>,
+            },
+
             <span class="ident">DebugSecurity</span>::<span class="ident">Custom</span> ( <span class="ident">policies</span> ) <span class="op">=</span><span class="op">&gt;</span>
                 <span class="ident">policies</span>,
         }
