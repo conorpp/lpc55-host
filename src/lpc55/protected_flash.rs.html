@@ -1455,6 +1455,20 @@
 <span id="1452">1452</span>
 <span id="1453">1453</span>
 <span id="1454">1454</span>
+<span id="1455">1455</span>
+<span id="1456">1456</span>
+<span id="1457">1457</span>
+<span id="1458">1458</span>
+<span id="1459">1459</span>
+<span id="1460">1460</span>
+<span id="1461">1461</span>
+<span id="1462">1462</span>
+<span id="1463">1463</span>
+<span id="1464">1464</span>
+<span id="1465">1465</span>
+<span id="1466">1466</span>
+<span id="1467">1467</span>
+<span id="1468">1468</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! The protected flash area (PFR) as Rust types</span>
 <span class="doccomment">//!</span>
@@ -1640,6 +1654,10 @@
     <span class="ident">VendorUsage</span>: <span class="ident">FactorySettingsVendorUsage</span>,
 {
     <span class="kw">pub</span> <span class="ident">factory_settings</span>: <span class="ident">FactorySettings</span><span class="op">&lt;</span><span class="ident">CustomerData</span>, <span class="ident">VendorUsage</span><span class="op">&gt;</span>,
+
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;is_default&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">seal_factory_settings</span>: <span class="ident">bool</span>,
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Default</span>, <span class="ident">Deserialize</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">Ord</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>, <span class="ident">Serialize</span>)]</span>
@@ -1652,6 +1670,10 @@
     <span class="ident">VendorUsage</span>: <span class="ident">CustomerSettingsVendorUsage</span>,
 {
     <span class="kw">pub</span> <span class="ident">customer_settings</span>: <span class="ident">CustomerSettings</span><span class="op">&lt;</span><span class="ident">CustomerData</span>, <span class="ident">VendorUsage</span><span class="op">&gt;</span>,
+
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;is_default&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">seal_customer_settings</span>: <span class="ident">bool</span>,
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Default</span>, <span class="ident">Deserialize</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">Ord</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>, <span class="ident">Serialize</span>)]</span>
@@ -2519,9 +2541,14 @@
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Deserialize</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">Ord</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>,<span class="ident">Serialize</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">DebugSecurityPolicy</span> {
-    <span class="ident">EnableWithDap</span>,
+    <span class="doccomment">/// Permanently disable the policy</span>
     <span class="ident">Disabled</span>,
+    <span class="doccomment">/// Permanently Enabled the policy</span>
     <span class="ident">Enabled</span>,
+    <span class="doccomment">/// Enabled the policy, but it could be changed by authenticated debugger</span>
+    <span class="ident">StartEnabled</span>,
+    <span class="doccomment">/// Disable the policy, but it could be changed by authenticated debugger</span>
+    <span class="ident">StartDisabled</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">DebugSecurity</span> {
@@ -2532,7 +2559,7 @@
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">DebugSecurityPolicy</span> {
     <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">Self</span>::<span class="ident">EnableWithDap</span>
+        <span class="self">Self</span>::<span class="ident">StartDisabled</span>
     }
 }
 
@@ -2540,14 +2567,14 @@
     <span class="kw">fn</span> <span class="ident">fixed_bit</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u32</span> {
         <span class="kw">use</span> <span class="ident">DebugSecurityPolicy</span>::<span class="kw-2">*</span>;
         <span class="kw">match</span> <span class="kw-2">*</span><span class="self">self</span> {
-            <span class="ident">EnableWithDap</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">0</span>,
+            <span class="ident">StartDisabled</span> <span class="op">|</span> <span class="ident">StartEnabled</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">0</span>,
             <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">1</span>,
         }
     }
     <span class="kw">fn</span> <span class="ident">enabled_bit</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u32</span> {
         <span class="kw">use</span> <span class="ident">DebugSecurityPolicy</span>::<span class="kw-2">*</span>;
         <span class="kw">match</span> <span class="kw-2">*</span><span class="self">self</span> {
-            <span class="ident">Enabled</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">1</span>,
+            <span class="ident">Enabled</span> <span class="op">|</span> <span class="ident">StartEnabled</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">1</span>,
             <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">0</span>,
         }
     }
@@ -2558,7 +2585,8 @@
         <span class="kw">let</span> [<span class="ident">fix</span>, <span class="ident">set</span>] <span class="op">=</span> <span class="ident">bits</span>;
         <span class="kw">use</span> <span class="ident">DebugSecurityPolicy</span>::<span class="kw-2">*</span>;
         <span class="kw">match</span> (<span class="ident">fix</span>, <span class="ident">set</span>) {
-            (<span class="bool-val">false</span>, <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">EnableWithDap</span>,
+            (<span class="bool-val">false</span>, <span class="bool-val">false</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">StartDisabled</span>,
+            (<span class="bool-val">false</span>, <span class="bool-val">true</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">StartEnabled</span>,
             (<span class="bool-val">true</span>, <span class="bool-val">false</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Disabled</span>,
             (<span class="bool-val">true</span>, <span class="bool-val">true</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Enabled</span>,
         }
