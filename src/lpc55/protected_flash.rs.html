@@ -1466,9 +1466,6 @@
 <span id="1463">1463</span>
 <span id="1464">1464</span>
 <span id="1465">1465</span>
-<span id="1466">1466</span>
-<span id="1467">1467</span>
-<span id="1468">1468</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! The protected flash area (PFR) as Rust types</span>
 <span class="doccomment">//!</span>
@@ -1569,6 +1566,11 @@
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;is_default&quot;</span>)]</span>
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">serialize_with</span> <span class="op">=</span> <span class="string">&quot;hex_serialize&quot;</span>)]</span>
     <span class="kw">pub</span> <span class="ident">sha256_hash</span>: <span class="ident">Sha256Hash</span>,
+
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;is_default&quot;</span>)]</span>
+    <span class="doccomment">/// Setting this to true will calculate the SHA256 automatically for `sha256_hash`.</span>
+    <span class="kw">pub</span> <span class="ident">seal</span>: <span class="ident">bool</span>,
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Default</span>, <span class="ident">Deserialize</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">Ord</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>, <span class="ident">Serialize</span>)]</span>
@@ -1636,6 +1638,11 @@
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;is_default&quot;</span>)]</span>
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">serialize_with</span> <span class="op">=</span> <span class="string">&quot;hex_serialize&quot;</span>)]</span>
     <span class="kw">pub</span> <span class="ident">sha256_hash</span>: <span class="ident">Sha256Hash</span>,
+
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;is_default&quot;</span>)]</span>
+    <span class="doccomment">/// Setting this to true will calculate the SHA256 automatically for `sha256_hash`.</span>
+    <span class="kw">pub</span> <span class="ident">seal</span>: <span class="ident">bool</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">CustomerSettings</span> {
@@ -1654,10 +1661,6 @@
     <span class="ident">VendorUsage</span>: <span class="ident">FactorySettingsVendorUsage</span>,
 {
     <span class="kw">pub</span> <span class="ident">factory_settings</span>: <span class="ident">FactorySettings</span><span class="op">&lt;</span><span class="ident">CustomerData</span>, <span class="ident">VendorUsage</span><span class="op">&gt;</span>,
-
-    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>)]</span>
-    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;is_default&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="ident">seal_factory_settings</span>: <span class="ident">bool</span>,
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Default</span>, <span class="ident">Deserialize</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">Ord</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>, <span class="ident">Serialize</span>)]</span>
@@ -1670,10 +1673,6 @@
     <span class="ident">VendorUsage</span>: <span class="ident">CustomerSettingsVendorUsage</span>,
 {
     <span class="kw">pub</span> <span class="ident">customer_settings</span>: <span class="ident">CustomerSettings</span><span class="op">&lt;</span><span class="ident">CustomerData</span>, <span class="ident">VendorUsage</span><span class="op">&gt;</span>,
-
-    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>)]</span>
-    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;is_default&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="ident">seal_customer_settings</span>: <span class="ident">bool</span>,
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Default</span>, <span class="ident">Deserialize</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">Ord</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>, <span class="ident">Serialize</span>)]</span>
@@ -1876,7 +1875,7 @@
     <span class="ident">CustomerData</span>: <span class="ident">FactorySettingsCustomerData</span>,
     <span class="ident">VendorUsage</span>: <span class="ident">FactorySettingsVendorUsage</span>,
 {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>[<span class="ident">u8</span>; <span class="number">512</span>]<span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_bytes</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>[<span class="ident">u8</span>; <span class="number">512</span>]<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span> [<span class="number">0u8</span>; <span class="number">512</span>];
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cursor</span> <span class="op">=</span> <span class="ident">buf</span>.<span class="ident">as_mut</span>();
 
@@ -1901,23 +1900,19 @@
         <span class="ident">cursor</span>.<span class="ident">write_all</span>(<span class="kw-2">&amp;</span>[<span class="number">0u8</span>; <span class="number">144</span>])<span class="question-mark">?</span>;
         <span class="ident">cursor</span>.<span class="ident">write_all</span>(<span class="self">self</span>.<span class="ident">customer_data</span>.<span class="ident">as_ref</span>())<span class="question-mark">?</span>;
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">cursor</span>.<span class="ident">len</span>(), <span class="number">32</span>);
+        
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">seal</span> {
+            <span class="macro">info</span><span class="macro">!</span>(<span class="string">&quot;Sealing factory page!&quot;</span>);
+
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">hasher</span> <span class="op">=</span> <span class="ident">sha2</span>::<span class="ident">Sha256</span>::<span class="ident">new</span>();
+            <span class="ident">hasher</span>.<span class="ident">update</span>(<span class="kw-2">&amp;</span><span class="ident">buf</span>[<span class="number">0</span>..<span class="number">480</span>]);
+            <span class="self">self</span>.<span class="ident">sha256_hash</span> <span class="op">=</span> <span class="ident">Sha256Hash</span>(<span class="ident">hasher</span>.<span class="ident">finalize</span>().<span class="ident">try_into</span>().<span class="ident">unwrap</span>());
+
+            <span class="ident">buf</span>[<span class="number">480</span>..<span class="number">512</span>].<span class="ident">as_mut</span>().<span class="ident">write_all</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">sha256_hash</span>.<span class="number">0</span>).<span class="ident">ok</span>();
+        }
 
         <span class="prelude-val">Ok</span>(<span class="ident">buf</span>)
     }
-
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_bytes_setting_hash</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>[<span class="ident">u8</span>; <span class="number">512</span>]<span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">to_bytes</span>()<span class="question-mark">?</span>;
-
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">hasher</span> <span class="op">=</span> <span class="ident">sha2</span>::<span class="ident">Sha256</span>::<span class="ident">new</span>();
-        <span class="ident">hasher</span>.<span class="ident">update</span>(<span class="kw-2">&amp;</span><span class="ident">buf</span>[..<span class="number">480</span>]);
-        <span class="self">self</span>.<span class="ident">sha256_hash</span> <span class="op">=</span> <span class="ident">Sha256Hash</span>(<span class="ident">hasher</span>.<span class="ident">finalize</span>().<span class="ident">try_into</span>().<span class="ident">unwrap</span>());
-
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cursor</span> <span class="op">=</span> <span class="ident">buf</span>[<span class="number">480</span>..].<span class="ident">as_mut</span>();
-        <span class="ident">cursor</span>.<span class="ident">write_all</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">sha256_hash</span>.<span class="number">0</span>).<span class="ident">ok</span>();
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">cursor</span>.<span class="ident">is_empty</span>());
-        <span class="prelude-val">Ok</span>(<span class="ident">buf</span>)
-    }
-
 }
 
 <span class="kw">fn</span> <span class="ident">parse_factory</span><span class="op">&lt;</span><span class="ident">CustomerData</span>: <span class="ident">FactorySettingsCustomerData</span>, <span class="ident">VendorUsage</span>: <span class="ident">FactorySettingsVendorUsage</span><span class="op">&gt;</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>])
@@ -1967,6 +1962,7 @@
         <span class="ident">rot_fingerprint</span>: <span class="ident">Sha256Hash</span>(<span class="ident">rot_fingerprint</span>.<span class="ident">try_into</span>().<span class="ident">unwrap</span>()),
         <span class="ident">customer_data</span>: <span class="ident">CustomerData</span>::<span class="ident">from</span>(<span class="ident">customer_data</span>.<span class="ident">try_into</span>().<span class="ident">unwrap</span>()),
         <span class="ident">sha256_hash</span>: <span class="ident">Sha256Hash</span>(<span class="ident">sha256_hash</span>.<span class="ident">try_into</span>().<span class="ident">unwrap</span>()),
+        <span class="ident">seal</span>: <span class="bool-val">false</span>,
     };
 
     <span class="prelude-val">Ok</span>((<span class="ident">input</span>, <span class="ident">factory</span>))
@@ -2785,7 +2781,7 @@
     <span class="ident">CustomerData</span>: <span class="ident">CustomerSettingsCustomerData</span>,
     <span class="ident">VendorUsage</span>: <span class="ident">CustomerSettingsVendorUsage</span>,
 {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>[<span class="ident">u8</span>; <span class="number">512</span>]<span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_bytes</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>[<span class="ident">u8</span>; <span class="number">512</span>]<span class="op">&gt;</span> {
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span> [<span class="number">0u8</span>; <span class="number">512</span>];
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cursor</span> <span class="op">=</span> <span class="ident">buf</span>.<span class="ident">as_mut</span>();
@@ -2829,19 +2825,16 @@
 
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">cursor</span>.<span class="ident">len</span>(), <span class="number">32</span>);
 
-        <span class="prelude-val">Ok</span>(<span class="ident">buf</span>)
-    }
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">seal</span> {
+            <span class="macro">info</span><span class="macro">!</span>(<span class="string">&quot;Sealing customer page!&quot;</span>);
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_bytes_setting_hash</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>[<span class="ident">u8</span>; <span class="number">512</span>]<span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">to_bytes</span>()<span class="question-mark">?</span>;
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">hasher</span> <span class="op">=</span> <span class="ident">sha2</span>::<span class="ident">Sha256</span>::<span class="ident">new</span>();
+            <span class="ident">hasher</span>.<span class="ident">update</span>(<span class="kw-2">&amp;</span><span class="ident">buf</span>[<span class="number">0</span>..<span class="number">480</span>]);
+            <span class="self">self</span>.<span class="ident">sha256_hash</span> <span class="op">=</span> <span class="ident">Sha256Hash</span>(<span class="ident">hasher</span>.<span class="ident">finalize</span>().<span class="ident">try_into</span>().<span class="ident">unwrap</span>());
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">hasher</span> <span class="op">=</span> <span class="ident">sha2</span>::<span class="ident">Sha256</span>::<span class="ident">new</span>();
-        <span class="ident">hasher</span>.<span class="ident">update</span>(<span class="kw-2">&amp;</span><span class="ident">buf</span>[..<span class="number">480</span>]);
-        <span class="self">self</span>.<span class="ident">sha256_hash</span> <span class="op">=</span> <span class="ident">Sha256Hash</span>(<span class="ident">hasher</span>.<span class="ident">finalize</span>().<span class="ident">try_into</span>().<span class="ident">unwrap</span>());
+            <span class="ident">buf</span>[<span class="number">480</span>..<span class="number">512</span>].<span class="ident">as_mut</span>().<span class="ident">write_all</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">sha256_hash</span>.<span class="number">0</span>).<span class="ident">ok</span>();
+        }
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cursor</span> <span class="op">=</span> <span class="ident">buf</span>[<span class="number">480</span>..].<span class="ident">as_mut</span>();
-        <span class="ident">cursor</span>.<span class="ident">write_all</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">sha256_hash</span>.<span class="number">0</span>).<span class="ident">ok</span>();
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">cursor</span>.<span class="ident">is_empty</span>());
         <span class="prelude-val">Ok</span>(<span class="ident">buf</span>)
     }
 
@@ -2901,6 +2894,7 @@
         ],
         <span class="ident">customer_data</span>: <span class="ident">CustomerData</span>::<span class="ident">from</span>(<span class="ident">customer_data</span>.<span class="ident">try_into</span>().<span class="ident">unwrap</span>()),
         <span class="ident">sha256_hash</span>: <span class="ident">Sha256Hash</span>(<span class="ident">sha256_hash</span>.<span class="ident">try_into</span>().<span class="ident">unwrap</span>()),
+        <span class="ident">seal</span>: <span class="bool-val">false</span>,
     };
 
     <span class="prelude-val">Ok</span>((<span class="ident">input</span>, <span class="ident">page</span>))
