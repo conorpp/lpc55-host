@@ -544,6 +544,9 @@
 <span id="541">541</span>
 <span id="542">542</span>
 <span id="543">543</span>
+<span id="544">544</span>
+<span id="545">545</span>
+<span id="546">546</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">core</span>::<span class="ident">convert</span>::<span class="ident">TryFrom</span>;
 
@@ -1073,15 +1076,18 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">test</span> {
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;with-device&quot;</span>, <span class="ident">test</span>))]</span>
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="comment">// #[test]</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;with-device&quot;</span>, <span class="ident">test</span>))]</span>
     <span class="kw">fn</span> <span class="ident">command_packet</span>() {
         <span class="comment">// 7 0 0 2  1 0 0 0  0 0 0 0</span>
         <span class="ident">insta</span>::<span class="macro">assert_debug_snapshot</span><span class="macro">!</span>(<span class="ident">Command</span>::<span class="ident">GetProperty</span>(<span class="ident">Property</span>::<span class="ident">CurrentVersion</span>).<span class="ident">command_packet</span>());
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="comment">// #[test]</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;with-device&quot;</span>, <span class="ident">test</span>))]</span>
     <span class="kw">fn</span> <span class="ident">hid_packet</span>() {
         <span class="comment">// 1 0 C 0  7 0 0 2  1 0 0 0  0 0 0 0</span>
         <span class="ident">insta</span>::<span class="macro">assert_debug_snapshot</span><span class="macro">!</span>(<span class="ident">Command</span>::<span class="ident">GetProperty</span>(<span class="ident">Property</span>::<span class="ident">CurrentVersion</span>).<span class="ident">hid_packet</span>());

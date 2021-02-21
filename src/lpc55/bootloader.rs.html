@@ -233,7 +233,6 @@
 <span id="230">230</span>
 <span id="231">231</span>
 <span id="232">232</span>
-<span id="233">233</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! The bootloader interface</span>
 <span class="doccomment">//!</span>
@@ -460,8 +459,7 @@
     }
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="attribute">#[<span class="ident">test</span>]</span>
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;with-device&quot;</span>, <span class="ident">test</span>))]</span>
 <span class="kw">fn</span> <span class="ident">test_all_properties</span>() {
     <span class="comment">// let (vid, pid) = (0x1fc9, 0x0021);</span>
     <span class="kw">let</span> (<span class="ident">vid</span>, <span class="ident">pid</span>) <span class="op">=</span> (<span class="number">0x1209</span>, <span class="number">0xb000</span>);
